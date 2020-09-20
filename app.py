@@ -10,6 +10,8 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__,  external_stylesheets=external_stylesheets)
 server = app.server
 
+COLOURS = ['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Brown', 'Black']
+
 # Describe the layout/ UI of the app
 app.layout = html.Div([
     Header(app),
@@ -30,9 +32,22 @@ app.layout = html.Div([
                     ),
                     html.Br(),
                     html.Br(),
-                    html.H4(id='button-message')
+                    html.H4(id='button-message'),
+                    html.Br(),
+                    html.Br(),
+                    html.H4('Select the colour to fill the box'),
+                    dcc.Dropdown(
+                        id='colour-dropdown',
+                        options=[{'value': colour, 'label': colour} for colour in COLOURS],
+                        placeholder='Select a colour...'
+                    ),
+                    html.Br(),
+                    html.Div(
+                        id='coloured-box',
+                        style={'height': '250px', 'width': '500px', 'border': '1px solid black'}
+                    )
                 ]
-            )
+            ),
         ],
         style={'padding-left': '100px', 'padding-right': '100px'}
     )
@@ -51,6 +66,15 @@ def message_button_presser(n_clicks):
         return 'Why are you still clicking you FOOL?!'
     else:
         return f'You refuse to give up... you\'ve clicked this button {n_clicks} times!'
+
+@app.callback(Output('coloured-box', 'style'),
+              Input('colour-dropdown', 'value'))
+def return_box_styling(colour_selected):
+    if colour_selected is None:
+        raise PreventUpdate
+    else:
+        return {'height': '250px', 'width': '500px', 'border': '1px solid black', 'background': colour_selected.lower()}
+
 
 
 if __name__ == "__main__":
