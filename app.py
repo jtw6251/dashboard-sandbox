@@ -19,7 +19,7 @@ app.layout = html.Div([
             html.Div(
                 id="page-content",
                 children=[
-                    html.Br(style={'height': '100px'}),
+                    html.Br(),
                     html.Button(
                         'DO NOT PRESS',
                         className='button-primary',
@@ -28,8 +28,9 @@ app.layout = html.Div([
                         style={'background': 'red', 'border': 'none', 'font': 'white', 'font-size': 24,
                                'height': '100px', 'width': '300px'}
                     ),
-                    html.Br(style={'height': '100px'}),
-                    html.H3(id='button-message', style={'font-weight': 'bold'})
+                    html.Br(),
+                    html.Br(),
+                    html.H4(id='button-message')
                 ]
             )
         ],
@@ -45,11 +46,11 @@ def message_button_presser(n_clicks):
     elif n_clicks == 1:
         return 'BOOOOOM!!!'
     elif n_clicks == 2:
-        return 'You have destroyed the world...'
+        return 'You have DESTROYED the world...'
     elif n_clicks == 3:
         return 'Why are you still clicking you FOOL?!'
     else:
-        return f'You refuse to give up and have now clicked this button {n_clicks} times'
+        return f'You refuse to give up... you\'ve clicked this button {n_clicks} times!'
 
 
 if __name__ == "__main__":
