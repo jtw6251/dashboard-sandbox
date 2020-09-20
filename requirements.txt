@@ -1,0 +1,5 @@
+# Packages required for app to run
+dash
+pandas
+dash-core-components
+dash-html-components
