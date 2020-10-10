@@ -6,14 +6,18 @@ from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
 import base64
 
-rick_astley_filename = 'assets/rick_astley.jpg'  # replace with your own image
+rick_astley_filename = 'assets/rick_astley.jpg'
 rick_astley = base64.b64encode(open(rick_astley_filename, 'rb').read())
+our_family_filename = 'assets/family.png'
+our_family = base64.b64encode(open(our_family_filename, 'rb').read())
+luke_filename = 'assets/luke.png'
+luke = base64.b64encode(open(luke_filename, 'rb').read())
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 server = app.server
 
-COLOURS = ['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Rick Astley', 'Purple', 'Brown', 'Black']
+COLOURS = ['Red', 'My brother...', 'Orange', 'Our family...', 'Yellow', 'Green', 'Blue', 'Rick Astley', 'Purple', 'Brown', 'Black']
 
 # Describe the layout/ UI of the app
 app.layout = html.Div([
@@ -85,6 +89,18 @@ def return_box_styling(colour_selected):
         return {'height': '250px', 'width': '500px', 'border': '1px solid black'}, \
         html.Img(
             src='data:image/jpg;base64,{}'.format(rick_astley.decode()),
+            style={'height': '250px', 'width': '500px'}
+        )
+    elif colour_selected == 'Our family...':
+        return {'height': '250px', 'width': '500px', 'border': '1px solid black'}, \
+        html.Img(
+            src='data:image/png;base64,{}'.format(our_family.decode()),
+            style={'height': '250px', 'width': '500px'}
+        )
+    elif colour_selected == 'My brother...':
+        return {'height': '250px', 'width': '500px', 'border': '1px solid black'}, \
+        html.Img(
+            src='data:image/png;base64,{}'.format(luke.decode()),
             style={'height': '250px', 'width': '500px'}
         )
     else:
