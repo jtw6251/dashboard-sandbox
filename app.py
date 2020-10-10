@@ -4,13 +4,16 @@ import dash_html_components as html
 from utils import Header
 from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
+import base64
 
+rick_astley_filename = 'assets/rick_astley.jpg'  # replace with your own image
+rick_astley = base64.b64encode(open(rick_astley_filename, 'rb').read())
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-app = dash.Dash(__name__,  external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 server = app.server
 
-COLOURS = ['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple', 'Brown', 'Black']
+COLOURS = ['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Rick Astley', 'Purple', 'Brown', 'Black']
 
 # Describe the layout/ UI of the app
 app.layout = html.Div([
@@ -36,10 +39,13 @@ app.layout = html.Div([
                     html.Br(),
                     html.Br(),
                     html.H4('Select the colour to fill the box'),
-                    dcc.Dropdown(
-                        id='colour-dropdown',
-                        options=[{'value': colour, 'label': colour} for colour in COLOURS],
-                        placeholder='Select a colour...'
+                    html.Div(
+                        style={'width': '500px'},
+                        children=dcc.Dropdown(
+                            id='colour-dropdown',
+                            options=[{'value': colour, 'label': colour} for colour in COLOURS],
+                            placeholder='Select a colour...'
+                        )
                     ),
                     html.Br(),
                     html.Div(
@@ -52,6 +58,7 @@ app.layout = html.Div([
         style={'padding-left': '100px', 'padding-right': '100px'}
     )
 ])
+
 
 @app.callback(Output('button-message', 'children'),
               Input('clicker', 'n_clicks'))
@@ -67,14 +74,23 @@ def message_button_presser(n_clicks):
     else:
         return f'You refuse to give up... you\'ve clicked this button {n_clicks} times!'
 
-@app.callback(Output('coloured-box', 'style'),
+
+@app.callback([Output('coloured-box', 'style'),
+               Output('coloured-box', 'children')],
               Input('colour-dropdown', 'value'))
 def return_box_styling(colour_selected):
     if colour_selected is None:
         raise PreventUpdate
+    elif colour_selected == 'Rick Astley':
+        return {'height': '250px', 'width': '500px', 'border': '1px solid black'}, \
+        html.Img(
+            src='data:image/jpg;base64,{}'.format(rick_astley.decode()),
+            style={'height': '250px', 'width': '500px'}
+        )
     else:
-        return {'height': '250px', 'width': '500px', 'border': '1px solid black', 'background': colour_selected.lower()}
-
+        return {'height': '250px', 'width': '500px', 'border': '1px solid black',
+                'background': colour_selected.lower()}, \
+               []
 
 
 if __name__ == "__main__":
