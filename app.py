@@ -6,12 +6,15 @@ from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
 import base64
 
+# Read in image files
 rick_astley_filename = 'assets/rick_astley.jpg'
 rick_astley = base64.b64encode(open(rick_astley_filename, 'rb').read())
 our_family_filename = 'assets/family.png'
 our_family = base64.b64encode(open(our_family_filename, 'rb').read())
 luke_filename = 'assets/luke.png'
 luke = base64.b64encode(open(luke_filename, 'rb').read())
+# Image look up dictionary
+images = {'My brother...': luke, 'Our family...': our_family, 'Rick Astley': rick_astley}
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
@@ -85,22 +88,10 @@ def message_button_presser(n_clicks):
 def return_box_styling(colour_selected):
     if colour_selected is None:
         raise PreventUpdate
-    elif colour_selected == 'Rick Astley':
+    elif colour_selected in images.keys():
         return {'height': '250px', 'width': '500px', 'border': '1px solid black'}, \
         html.Img(
-            src='data:image/jpg;base64,{}'.format(rick_astley.decode()),
-            style={'height': '250px', 'width': '500px'}
-        )
-    elif colour_selected == 'Our family...':
-        return {'height': '250px', 'width': '500px', 'border': '1px solid black'}, \
-        html.Img(
-            src='data:image/png;base64,{}'.format(our_family.decode()),
-            style={'height': '250px', 'width': '500px'}
-        )
-    elif colour_selected == 'My brother...':
-        return {'height': '250px', 'width': '500px', 'border': '1px solid black'}, \
-        html.Img(
-            src='data:image/png;base64,{}'.format(luke.decode()),
+            src='data:image/jpg;base64,{}'.format(images[colour_selected].decode()),
             style={'height': '250px', 'width': '500px'}
         )
     else:
